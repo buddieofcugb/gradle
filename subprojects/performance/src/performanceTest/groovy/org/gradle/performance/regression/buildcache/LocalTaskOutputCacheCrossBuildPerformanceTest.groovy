@@ -59,9 +59,9 @@ class LocalTaskOutputCacheCrossBuildPerformanceTest extends AbstractCrossBuildPe
         runner.run()
 
         where:
-        testProject       | tasks
-        "mediumWithJUnit" | ["build"]
-        "bigOldJava"      | ["assemble"]
+        testProject                  | tasks
+        "largeMonolithicProjectJava" | ["assemble"]
+        "largeMultiProjectJava"      | ["assemble"]
     }
 
 }
