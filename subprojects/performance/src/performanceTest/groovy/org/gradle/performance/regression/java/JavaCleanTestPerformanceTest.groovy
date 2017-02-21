@@ -19,15 +19,14 @@ package org.gradle.performance.regression.java
 import org.gradle.performance.AbstractCrossVersionPerformanceTest
 import spock.lang.Unroll
 
-class TestExecutionPerformanceTest extends AbstractCrossVersionPerformanceTest {
-    @Unroll("Project '#testProject' test execution")
-    def "test execution"() {
+class JavaCleanTestPerformanceTest extends AbstractCrossVersionPerformanceTest {
+
+    @Unroll
+    def "#testProject"() {
         given:
-        runner.testId = "test $testProject"
-        runner.testProject = testProject
         runner.tasksToRun = ['cleanTest', 'test']
         runner.args = ['-q']
-        runner.gradleOpts = ["-Xms256m", "-Xmx256m"]
+        runner.gradleOpts = ["-Xms${memory}", "-Xmx${memory}"]
 
         when:
         def result = runner.run()
@@ -36,10 +35,10 @@ class TestExecutionPerformanceTest extends AbstractCrossVersionPerformanceTest {
         result.assertCurrentVersionHasNotRegressed()
 
         where:
-        testProject         | _
-        "withTestNG"        | _
-        "withJUnit"         | _
-        "withVerboseTestNG" | _
-        "withVerboseJUnit"  | _
+        testProject                        | memory
+        "largeMonolithicProjectJava"       | "265m"
+        "largeMultiProjectJava"            | "265m"
+        "largeMonolithicProjectJavaTestNG" | "265m"
+        "largeMultiProjectJavaTestNG"      | "265m"
     }
 }
