@@ -69,6 +69,10 @@ class CachedTaskExecutionErrorHandlingIntegrationTest extends AbstractIntegratio
             buildCache {
                 registerBuildCacheServiceFactory(new FailingBuildCacheServiceFactory())
                 
+                local {
+                    enabled = false
+                }
+                
                 remote(FailingBuildCache) {
                     shouldFail = gradle.startParameter.systemPropertiesArgs.containsKey("fail")
                 }
