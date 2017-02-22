@@ -22,8 +22,9 @@ import spock.lang.Unroll
 class IdeIntegrationPerformanceTest extends AbstractCrossVersionPerformanceTest {
 
     @Unroll
-    def "#testProject (Eclipse)"() {
+    def "eclipse onf #testProject"() {
         given:
+        runner.testProject = testProject
         runner.tasksToRun = ['eclipse']
         runner.gradleOpts = ["-Xms${memory}", "-Xmx${memory}"]
 
@@ -40,8 +41,9 @@ class IdeIntegrationPerformanceTest extends AbstractCrossVersionPerformanceTest 
     }
 
     @Unroll
-    def "#testProject (IDEA)"() {
+    def "idea on #testProject"() {
         given:
+        runner.testProject = testProject
         runner.tasksToRun = ['idea']
         runner.gradleOpts = ["-Xms${memory}", "-Xmx${memory}"]
 
