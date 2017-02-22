@@ -31,27 +31,27 @@ class LocalTaskOutputCacheCrossBuildPerformanceTest extends AbstractCrossBuildPe
         runner.testGroup = "task output cache"
         runner.buildSpec {
             projectName(testProject).displayName("always-miss pull-only cache").invocation {
-                tasksToRun("clean", *tasks).useDaemon().args("-Dorg.gradle.cache.tasks=true", "-Dorg.gradle.cache.tasks.push=false")
+                tasksToRun("clean", *tasks).gradleOpts("-Xms${memory}", "-Xmx${memory}").useDaemon().args("-Dorg.gradle.cache.tasks=true", "-Dorg.gradle.cache.tasks.push=false")
             }
         }
         runner.buildSpec {
             projectName(testProject).displayName("push-only cache").invocation {
-                tasksToRun("clean", *tasks).useDaemon().args("-Dorg.gradle.cache.tasks=true", "-Dorg.gradle.cache.tasks.pull=false")
+                tasksToRun("clean", *tasks).gradleOpts("-Xms${memory}", "-Xmx${memory}").useDaemon().args("-Dorg.gradle.cache.tasks=true", "-Dorg.gradle.cache.tasks.pull=false")
             }
         }
         runner.buildSpec {
             projectName(testProject).displayName("fully cached").invocation {
-                tasksToRun("clean", *tasks).useDaemon().args("-Dorg.gradle.cache.tasks=true")
+                tasksToRun("clean", *tasks).gradleOpts("-Xms${memory}", "-Xmx${memory}").useDaemon().args("-Dorg.gradle.cache.tasks=true")
             }
         }
         runner.baseline {
             projectName(testProject).displayName("fully up-to-date").invocation {
-                tasksToRun(tasks).useDaemon()
+                tasksToRun(tasks).gradleOpts("-Xms${memory}", "-Xmx${memory}").useDaemon()
             }
         }
         runner.baseline {
             projectName(testProject).displayName("non-cached").invocation {
-                tasksToRun("clean", *tasks).useDaemon()
+                tasksToRun("clean", *tasks).gradleOpts("-Xms${memory}", "-Xmx${memory}").useDaemon()
             }
         }
 
@@ -59,9 +59,9 @@ class LocalTaskOutputCacheCrossBuildPerformanceTest extends AbstractCrossBuildPe
         runner.run()
 
         where:
-        testProject                  | tasks
-        "largeMonolithicProjectJava" | ["assemble"]
-        "largeMultiProjectJava"      | ["assemble"]
+        testProject                  | tasks        | memory
+        "largeMonolithicJavaProject" | ["assemble"] | "4g"
+        "largeJavaMultiProject"      | ["assemble"] | "4g"
     }
 
 }
